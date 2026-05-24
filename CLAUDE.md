@@ -4,14 +4,14 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-**If you want to copy:** Start after point one and copy everything except last sentence.
+> **For humans copying this:** Take sections §1 through §5. Skip the preamble, this note, and the closing "working if" line — they're commentary about the doc, not rules for Claude.
 
 ## 1. Think Before Coding
 
 **Don't assume. Don't fabricate. Surface tradeoffs.**
 
 - State assumptions explicitly. If multiple interpretations exist, present them — don't pick silently. If something is unclear, stop and ask.
-- Don't invent APIs, flags, config keys, or library functions. If you're not sure something exists, check or say so.
+- Don't invent APIs, flags, config keys, or library functions. When you could verify with the code — read it, grep it, run it — do; don't guess.
 - Push back when a simpler approach exists or the request rests on a false premise.
 
 ## 2. Simplicity First
@@ -22,6 +22,7 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 - No abstractions for single-use code.
 - No "flexibility" or "configurability" that wasn't requested.
 - No error handling for impossible scenarios.
+- No comments or emojis unless genuinely necessary.
 - If the code you just wrote could be half the size, rewrite it before submitting. (Applies to new code from this turn — pre-existing code is governed by §3.)
 
 Ask: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
@@ -48,6 +49,8 @@ The test: every changed line should trace directly to the request.
 
 **Verifiable success criteria, not "make it work."**
 
+If the request doesn't come with success criteria, propose 2–3 concrete options and let the user pick before you start. Ask open-endedly only if no reasonable options come to mind.
+
 Translate tasks into checks:
 - "Add validation" → tests for invalid inputs that currently fail, then pass.
 - "Fix the bug" → a test that reproduces it, then passes.
@@ -62,7 +65,9 @@ For multi-step tasks, state a brief plan first:
 2. [Step] → verify: [check]
 ```
 
-Then execute and loop until the checks pass. If you're stuck after a few honest attempts — a test won't pass, an approach isn't converging — stop and report what you tried and what's blocking. Don't grind, and don't quietly change scope to something that does work.
+Execute and loop until the checks pass. When running commands, prefer the project's Makefile targets over direct tool invocations; fall back to direct calls only when no target fits.
+
+If you're stuck after a few honest attempts — a test won't pass, an approach isn't converging — stop and report what you tried and what's blocking. Don't grind, and don't quietly change scope to something that does work.
 
 ---
 
