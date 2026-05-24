@@ -4,6 +4,8 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
+**If you want to copy:** Start after point one and copy everything except last sentence.
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't fabricate. Surface tradeoffs.**
