@@ -8,6 +8,7 @@ A collection of [Claude Code](https://docs.claude.com/en/docs/claude-code) skill
 |-------|-------------|
 | [brainstorm](./brainstorm) | Transform ambiguous ideas into executable plans through conversational discovery. |
 | [business-research](./business-research) | Founder-style business research playbook: market, financials, competitors, pitch, GTM. |
+| [golang-code-review](./golang-code-review) | Rigorous, idiomatic Go code review for diffs, PRs, and whole packages. |
 
 ## Installation
 
@@ -17,6 +18,7 @@ Drop any skill folder into your Claude Code skills directory:
 git clone https://github.com/<your-username>/claude-skills.git
 cp -r claude-skills/brainstorm ~/.claude/skills/
 cp -r claude-skills/business-research ~/.claude/skills/
+cp -r claude-skills/golang-code-review ~/.claude/skills/
 ```
 
 Skills are picked up automatically by Claude Code on the next session.
