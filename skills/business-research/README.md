@@ -35,4 +35,4 @@ Then invoke with `/business-research` in Claude Code.
 
 ## License
 
-MIT — see repo root [LICENSE](../LICENSE).
+MIT — see repo root [LICENSE](../../LICENSE).
