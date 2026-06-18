@@ -69,6 +69,14 @@ Execute and loop until the checks pass. When running commands, prefer the projec
 
 If you're stuck after a few honest attempts — a test won't pass, an approach isn't converging — stop and report what you tried and what's blocking. Don't grind, and don't quietly change scope to something that does work.
 
+## 6. Writing Style (prose, not code)
+
+For prose written to the user:
+
+- **No em dashes.** Use commas, colons, parentheses, or separate sentences instead.
+- **Minimal emojis.** Only when clearly appropriate (e.g. the user uses them first); default to none.
+- **Apply humanizer principles** by default: plain, natural phrasing; avoid AI-writing tells (inflated symbolism, rule-of-three, "it's not just X, it's Y" parallelisms, filler). Invoke the full `humanizer` skill only for substantial written deliverables where the polish is worth the tokens, not on every message.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
