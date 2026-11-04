@@ -18,6 +18,8 @@ Drop into any project root, or merge into `~/.claude/CLAUDE.md` for global use.
 | [brainstorm](./skills/brainstorm) | Transform ambiguous ideas into executable plans through conversational discovery. |
 | [business-research](./skills/business-research) | Founder-style business research playbook: market, financials, competitors, pitch, GTM. |
 | [golang-code-review](./skills/golang-code-review) | Rigorous, idiomatic Go code review for diffs, PRs, and whole packages. |
+| [java-code-review](./skills/java-code-review) | Rigorous Java code review for diffs, PRs, and whole packages, with optional house style. |
+| [java-code-style](./skills/java-code-style) | Default Java house style for writing and reviewing code. |
 
 ## Installation
 
@@ -34,6 +36,8 @@ cd claude-toolkit
 cp -r skills/brainstorm ~/.claude/skills/
 cp -r skills/business-research ~/.claude/skills/
 cp -r skills/golang-code-review ~/.claude/skills/
+cp -r skills/java-code-review ~/.claude/skills/
+cp -r skills/java-code-style ~/.claude/skills/
 ```
 
 Skills are picked up automatically by Claude Code on the next session.

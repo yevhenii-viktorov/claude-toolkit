@@ -2,6 +2,7 @@
 
 <required_reading>
 Always read first:
+- the project's `AGENTS.md`/`CLAUDE.md`, plus `../java-code-style/SKILL.md` if the user opted in at intake (house style; wins over the references)
 - references/checklist.md (master pre-flight list)
 
 Read on-demand based on what's in the diff (the first three are this skill's primary focus — sanity-check them on every diff):
@@ -47,15 +48,17 @@ Read the surrounding code, not just the diff. The diff hides the lines on either
 bash scripts/static-analysis.sh        # auto-detects Maven/Gradle, skips absent plugins
 ```
 
+Prefer the project's own verify command when `AGENTS.md`/`CLAUDE.md`/the README or a Makefile names one (for example `mvn clean verify` with the `JAVA_HOME` it asks for), and report the SonarQube gate if the project uses it. The script is the fallback.
+
 Capture output. **Don't restate** findings line-by-line — summarize ("Checkstyle clean; 2 SpotBugs `EI_EXPOSE_REP` on `OrderService`, fix those") and focus your review on what the tools can't see. If a tool isn't installed or the plugin isn't configured, note it once at the bottom — don't try to install tooling.
 
 ## Step 4 — Walk the diff with the checklist
 
-Open references/checklist.md and scan the diff against each row, leading with the three primary dimensions (style, code smells, bugs). For every match:
+Open references/checklist.md and scan the diff against each row, leading with the primary dimensions (house style, idioms, code smells, bugs). For every match:
 
 1. Note `file:line`.
 2. Capture the offending snippet (≤5 lines).
-3. Identify the **rule** it violates and cite the source (Effective Java item, Google Java Style §, JLS §, SpotBugs/Checkstyle rule ID).
+3. Identify the **rule** it violates and cite the source (`AGENTS.md: <section>`, `java-code-style: <section>`, Effective Java item, Google Java Style §, JLS §, SpotBugs/Checkstyle rule ID).
 4. Write the fix as a code block — often the fix is *less code*.
 5. Assign severity per the bar in SKILL.md.
 
@@ -70,6 +73,9 @@ Use templates/review-output.md. Order findings by severity (Critical → High �
 - Did any finding duplicate the linter? (Drop or roll up under Static Analysis.)
 - Does every Critical actually meet the Critical bar? (Demote if not.)
 - Did you cite a rule for each finding? (If you can't, it's opinion — drop or demote.)
+- Did you flag anything the house style allows (no `final` on parameters or classes, no Javadoc, layer packages, no builder)? (Drop it.)
+- Did you check every changed line against the house style, including tests?
+- Does the review's prose avoid em dashes?
 - Did you check for over-engineering, not just bugs? (A simpler design is a valid finding.)
 - Are there ≤3 positive observations and are they concrete? (Trim "good job overall" filler.)
 
@@ -84,6 +90,6 @@ Print the review in the chat. Do not write it to a file unless the user asked.
 - No pre-existing-code findings (unless the diff worsened them — flagged as such).
 - Linter output summarized, not duplicated.
 - Each finding has rule + fix.
-- Style, smells, and bugs visibly led the review.
+- House style, smells, and bugs visibly led the review.
 - Verdict line at the end (Approve / Approve with comments / Request changes).
 </success_criteria>

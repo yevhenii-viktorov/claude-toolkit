@@ -7,10 +7,10 @@ Sources: Effective Java Items 6, 67. **Measure before optimizing** (Item 67) —
 ```java
 // BAD — O(n²): each += allocates a new String
 String s = "";
-for (var part : parts) s += part + ",";
+for (final String part : parts) s += part + ",";
 // GOOD
-var sb = new StringBuilder();
-for (var part : parts) sb.append(part).append(',');
+final StringBuilder sb = new StringBuilder();
+for (final String part : parts) sb.append(part).append(',');
 ```
 
 - `+` in a loop → `StringBuilder`. (A few `+` outside a loop is fine — the compiler handles it.)

@@ -4,14 +4,13 @@ Sources: Effective Java Item 15 (accessibility), package-design conventions. Thi
 
 ## Packages
 
-- **Package by feature, not by layer.** `com.acme.order` (containing the order's controller, service, repo) localizes change better than `com.acme.controller` / `com.acme.service` / `com.acme.repository` split across the whole app. A change to one feature touches one package. Flag layer-only packaging in new modules; don't crusade against it in an established codebase mid-PR (Surgical Changes).
+- **Follow the project's package layout.** If `AGENTS.md`/`CLAUDE.md` fixes one (for example layer packages `controller`/`service`/`repository`/`entity`/`model`), new classes go where it says, and a class in the wrong package is a finding. Only when a new module has no convention yet, suggest packaging by feature.
 - **No dumping-ground packages** — `util`, `common`, `helpers`, `misc`, `shared`, `core` that accrete unrelated classes. Each such class usually belongs next to what it serves, or in a focused package named for its job. A genuinely shared, cohesive utility is fine; a junk drawer isn't.
 - Package names: all lowercase, no underscores, singular (idioms-style.md).
 
 ## Visibility & encapsulation (Item 15)
 
-- **Minimize accessibility** — top-level classes `package-private` unless they're part of the module's API; members `private` by default. Public surface is a commitment; keep it small.
-- A class only used within its package shouldn't be `public`.
+- **Minimize accessibility** — members `private` by default. For top-level classes follow the codebase: Spring components in layer packages are normally `public`; a helper type used only inside its package can be package-private.
 - No public mutable static fields (a global mutable-state and thread-safety hazard).
 
 ## Dependencies
@@ -28,9 +27,9 @@ Sources: Effective Java Item 15 (accessibility), package-design conventions. Thi
 
 ## Quick scan
 
-- New package organized purely by layer where feature packaging fits.
+- New class in a package that breaks the project's documented layout.
 - `util`/`common`/`misc`/`helpers` dumping-ground package accreting unrelated classes.
-- `public` on a class/member only used within its package.
+- `public` on a member only used within its class or package.
 - Public mutable static field.
 - New circular dependency between packages; domain depending on infrastructure.
 - Unused/duplicate build dependency added.

@@ -62,7 +62,7 @@ Classic colon-form `switch` falls through when a `case` lacks `break`/`return`/`
 
 ## String & formatting bugs
 
-- `String.format` / `printf` argument-count or type mismatch — `%d` with a `String` throws at runtime, not compile. SpotBugs `VA_FORMAT_STRING_*`.
+- `String.formatted` / `String.format` / `printf` argument-count or type mismatch — `%d` with a `String` throws at runtime, not compile. SpotBugs `VA_FORMAT_STRING_*`.
 - Locale-dependent `toLowerCase()`/`toUpperCase()` without an explicit `Locale` — the Turkish-`i` bug. Use `toLowerCase(Locale.ROOT)` for protocol/identifier strings.
 - `split`, `replaceAll`, `matches` take **regex**, not literal strings — `"a.b.c".split(".")` returns empty. Use `Pattern.quote` or `split("\\.")`.
 

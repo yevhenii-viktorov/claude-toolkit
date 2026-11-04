@@ -20,7 +20,7 @@ try {
 }
 ```
 
-An empty catch is acceptable only when ignoring is *genuinely correct* and *documented why* — and then name the variable `ignored` and comment the reason. SpotBugs `DE_MIGHT_IGNORE`, `REC_CATCH_EXCEPTION`.
+An empty catch is acceptable only when ignoring is *genuinely correct*; name the variable `ignored` and make the reason clear from the method name (the house style allows no explanatory comments; the rationale goes in the commit). SpotBugs `DE_MIGHT_IGNORE`, `REC_CATCH_EXCEPTION`.
 
 ## Catching too broadly (Item 73 spirit)
 
@@ -80,7 +80,7 @@ catch (SQLException e) {
 }
 // CORRECT — cause preserved
 catch (SQLException e) {
-    throw new DataAccessException("load failed for id=" + id, e);
+    throw new DataAccessException("load failed for id=%s".formatted(id), e);
 }
 ```
 
@@ -89,8 +89,11 @@ catch (SQLException e) {
 
 ## Custom exceptions
 
-- Extend `RuntimeException` for unchecked, `Exception` for checked. Provide the `(String, Throwable)` constructor so callers can chain causes.
-- Don't create a new exception type per call site — a handful of meaningful domain exceptions beats dozens of one-use ones (ties to over-engineering, code-smells.md).
+House style (`java-code-style: Spring`):
+- **One `RuntimeException` subclass per failure case**, with its message built in the constructor using `formatted` (`super("Run '%s' not found".formatted(id))`). Callers pass the domain values, not a message.
+- Add a cause-taking constructor only when the exception actually wraps one (for example a failed outbound call).
+- The HTTP status is chosen only in the `@RestControllerAdvice`, and every error uses one response shape. Flag `ResponseStatusException`, `@ResponseStatus` on exceptions, or status logic in controllers.
+- One type per failure *case*, not per call site: two places that throw for the same reason share a type.
 
 ## `finally` hazards (see also bugs-correctness.md)
 

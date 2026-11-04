@@ -27,7 +27,7 @@ List<Item> items() { return items; }           // already unmodifiable via copyO
 ## Composition over inheritance (Items 18–19)
 
 - Favor composition + delegation over `extends`. Inheritance breaks encapsulation: a subclass depends on the superclass's implementation details and is fragile across versions.
-- If you do design for inheritance, document the self-use of overridable methods, and otherwise **make the class `final`** (Item 19). A non-final class with overridable methods and no design intent is a hazard.
+- Classes don't need to be `final`; never flag a class for missing it.
 - Never call an overridable method from a constructor — the subclass override runs before the subclass is initialized.
 
 ## Interfaces (Items 20–22)
@@ -41,7 +41,7 @@ List<Item> items() { return items; }           // already unmodifiable via copyO
 - **Validate parameters** (Item 49) at public-API boundaries — `Objects.requireNonNull`, range checks — and fail fast with a clear message. (But not defensive checks for states the call graph makes impossible — that's a smell.)
 - **Return empty, not `null`** (Item 54), for collections/arrays/optionals.
 - **`Optional` for "maybe absent" returns** (Item 55), not for params/fields. (See idioms-style.md.)
-- **Builder for many parameters** (Item 2), especially optional ones — beats telescoping constructors and avoids the boolean/argument-order traps.
+- **Many parameters:** group them into a `record` (a parameter object). Don't hand-roll a builder, and don't use Lombok `@Builder` (forbidden by the house style). Builders from third-party APIs are fine to call.
 - **Minimize accessibility** (Item 15) — `private` by default, widen only as needed. Public mutable fields are almost always wrong; expose behavior, not state.
 - **Overloading**: don't overload methods with the same arg count and ambiguous types (Item 52) — dispatch is by static type and surprises readers.
 - **Varargs**: fine, but guard the zero-args case if it's invalid (Item 53).
@@ -55,9 +55,9 @@ List<Item> items() { return items; }           // already unmodifiable via copyO
 
 - Mutable type that could be a `record` / immutable class.
 - Mutable constructor arg stored directly, or mutable internal returned by getter (no defensive copy).
-- `extends` for code reuse where composition fits; non-final class with overridable methods and no inheritance design.
+- `extends` for code reuse where composition fits.
 - Constant interface; single-impl interface with no real seam.
 - `null` returned for a collection/array.
-- Telescoping constructors where a builder belongs.
+- Telescoping constructors or long parameter lists where a parameter `record` belongs.
 - Public mutable field; over-wide accessibility.
 - Unvalidated public-API parameters (or defensive checks for impossible states).

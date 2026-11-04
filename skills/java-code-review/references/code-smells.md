@@ -29,7 +29,7 @@ class PriceCalculator { BigDecimal calc(Order o) { ... } }
 - **God class** — a class doing several unrelated jobs (parsing + persistence + HTTP + formatting). Symptoms: hundreds of lines, many unrelated fields, "and" in the class's one-line description. Split by responsibility (SRP).
 - **Long method** — past ~40–50 lines or doing several distinct steps, it should be decomposed into named helpers. The win is *readable names for the steps*, not line count for its own sake.
 - **Deep nesting / arrow code** — 3+ levels of `if`/`for` nesting. Fix with guard clauses (early return), extracting the inner loop body to a method, or inverting conditions.
-- **Long parameter list** — 4+ parameters, especially several of the same type (call-site argument-order bugs). Introduce a parameter object / `record`, or a builder.
+- **Long parameter list** — 4+ parameters, especially several of the same type (call-site argument-order bugs). Introduce a parameter `record` (no builders: house style).
 
 ## Primitive obsession
 
@@ -86,13 +86,14 @@ Extending a class to reuse a few methods, overriding to change behavior in fragi
 - A comment explaining *what* a confusingly-named variable holds → rename the variable instead.
 - A block comment dividing one method into "sections" → that's several methods.
 - `// HACK` / `// this is wrong but` left in production → flag.
+- Any explanatory comment or Javadoc on application code → flag (house style); the fix is a clearer name, and the rationale goes in the commit or README.
 
 ## Quick scan
 
 - Interface/strategy/factory with exactly one implementation → inline.
 - Config flags / hooks for variation nobody requested → remove.
 - Method > ~50 lines or 3+ nesting levels → decompose.
-- 4+ params, repeated types → parameter object / builder.
+- 4+ params, repeated types → parameter `record`.
 - `Map<String, Object>` modeling a real entity → `record`.
 - Boolean parameter(s) → enum or split method.
 - Magic literal in logic → named constant.

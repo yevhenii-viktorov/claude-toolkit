@@ -2,6 +2,7 @@
 
 <required_reading>
 Always read first:
+- the project's `AGENTS.md`/`CLAUDE.md`, plus `../java-code-style/SKILL.md` if the user opted in at intake (house style; wins over the references)
 - references/checklist.md (master pre-flight list)
 
 Then load references on demand exactly as in workflows/review-diff.md `<required_reading>` — driven by what the PR's files touch. The three primary dimensions (idioms-style, code-smells, bugs-correctness) are sanity-checked on every PR.
@@ -45,6 +46,8 @@ Find call sites of changed methods (`grep`) — signature changes and newly-null
 ```bash
 bash scripts/static-analysis.sh
 ```
+
+Prefer the project's own verify command when `AGENTS.md`/`CLAUDE.md`/the README or a Makefile names one (for example `mvn clean verify` with the `JAVA_HOME` it asks for), and report the SonarQube gate if the project uses it. The script is the fallback.
 
 If you didn't check out the branch, rely on the PR's CI checks for the mechanical layer and note that in the Static Analysis section. **Don't restate** CI/linter findings — summarize and move to the semantic review.
 

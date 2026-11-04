@@ -19,10 +19,16 @@ Bugs and crappy code first, design second, with an uncompromising style bar thro
 
 If the target is ambiguous, the skill asks one routing question and then proceeds.
 
+## House style
+
+The project's own rules (checkstyle, `.editorconfig`, AGENTS.md/CLAUDE.md) always apply. Before reviewing, the skill
+asks whether to also apply [java-code-style](../java-code-style); skip the question by saying so in the request.
+Install both folders side by side for that option to work.
+
 ## Install
 
 ```bash
-cp -r java-code-review ~/.claude/skills/
+cp -r java-code-review java-code-style ~/.claude/skills/
 ```
 
 Then ask Claude Code to "review my Java changes", "review PR #123", or "audit src/main/java/.../auth".

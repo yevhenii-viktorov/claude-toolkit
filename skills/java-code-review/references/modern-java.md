@@ -1,6 +1,6 @@
-# Modern Java (through Java 21)
+# Modern Java
 
-Baseline: **Java 21 LTS**. Treat these constructs as the idiomatic default and flag verbose legacy equivalents — but only when the modern form genuinely reads better. Don't demand a rewrite for its own sake. Cross-references idioms-style.md.
+Baseline: **the project's Java version** (check `java.version`/`release` in the build; at least 21). Treat these constructs as the idiomatic default and flag verbose legacy equivalents — but only when the modern form genuinely reads better. Don't demand a rewrite for its own sake. Cross-references idioms-style.md.
 
 ## Records (Java 16) — for value/data types
 
@@ -14,7 +14,8 @@ record Point(int x, int y) {}
 ```
 
 - Flag hand-written immutable DTOs/value objects that should be records (especially ones with hand-rolled `equals`/`hashCode` — a correctness risk, see bugs-correctness.md).
-- Records can have compact constructors for validation/normalization and defensive copies — use them.
+- Records are also the house choice for Spring `@ConfigurationProperties`.
+- Records can have compact constructors for validation/normalization and defensive copies — use them (house style puts normalisation, such as trimming a name, there).
 - Records are *not* for mutable entities (JPA `@Entity`) or types needing inheritance — don't force it.
 
 ## Sealed types (Java 17) — closed hierarchies
@@ -57,7 +58,7 @@ Flag colon-form switches with `break`-per-case where an expression switch is cle
 
 ## Text blocks (Java 15)
 
-For multi-line string literals (SQL, JSON, HTML), `"""..."""` beats `"\n"`-spliced concatenation — readable and fewer escaping bugs.
+For multi-line string literals (SQL, JSON, HTML), `"""..."""` beats `"\n"`-spliced concatenation — readable and fewer escaping bugs. For interpolation, `"...".formatted(...)` is the house choice over `String.format`.
 
 ## Virtual threads (Java 21)
 
@@ -65,7 +66,7 @@ For high-concurrency **blocking I/O**, `Executors.newVirtualThreadPerTaskExecuto
 
 ## Smaller wins
 
-- **`var`** (Java 10) for obvious local types — see idioms-style.md for when not to.
+- **`var`** (Java 10): not used; the house style declares types (idioms-style.md).
 - **`Optional.stream()`** (Java 9), **`Stream.toList()`** (Java 16), `Collectors.teeing` — see collections-streams.md.
 - **`List.of`/`Map.of`/`Set.of`** (Java 9) for small immutable collections.
 - **`java.time`** over `Date`/`Calendar`/`SimpleDateFormat` — immutable, thread-safe, clearer (a correctness win, see concurrency.md).

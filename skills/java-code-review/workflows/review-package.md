@@ -4,6 +4,7 @@ Use when the user names a directory, module, or file with no diff context ("revi
 
 <required_reading>
 Always read first:
+- the project's `AGENTS.md`/`CLAUDE.md`, plus `../java-code-style/SKILL.md` if the user opted in at intake (house style; wins over the references)
 - references/checklist.md (master pre-flight list)
 
 Load every reference whose dimension the code touches. For a full package audit, expect to consult most of them. The three primary dimensions (idioms-style, code-smells, bugs-correctness) apply to every file.
@@ -27,12 +28,15 @@ Read the package's entry points and public types first to understand its job, th
 bash scripts/static-analysis.sh
 ```
 
+Prefer the project's own verify command when `AGENTS.md`/`CLAUDE.md`/the README or a Makefile names one (for example `mvn clean verify` with the `JAVA_HOME` it asks for), and report the SonarQube gate if the project uses it. The script is the fallback.
+
 Summarize the mechanical findings. For an audit, a *pattern* in the linter output (e.g. "8 `EI_EXPOSE_REP` across the package") is itself a theme worth calling out.
 
 ## Step 3 — Review file by file, dimension by dimension
 
 For each file, walk references/checklist.md. Lead with the three primary dimensions:
-- **Style/idioms** — naming, `final`, `var`, control flow, `Optional` use, modern-Java opportunities.
+- **House style** — the rules in `AGENTS.md` (and java-code-style, if opted in) that checkstyle can't enforce.
+- **Style/idioms** — naming, `final`, no `var`, control flow, `Optional` use, modern-Java opportunities.
 - **Code smells** — god classes, long methods, deep nesting, primitive obsession, duplication, over-engineering. At package scope, watch for *duplication across files* and *abstractions used by only one caller*.
 - **Bugs/correctness** — nullability, `equals`/`hashCode`, overflow, resource leaks, concurrency on shared state.
 

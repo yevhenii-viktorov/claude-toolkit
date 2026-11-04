@@ -2,6 +2,8 @@
 
 Sources: [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), [Effective Java, 3rd ed.](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/) (Bloch), the [JLS](https://docs.oracle.com/javase/specs/). This is a **primary** dimension for this skill — hold the bar firmly. But flag style that hurts readability or correctness, not formatting Checkstyle already owns.
 
+**House style wins.** Where this file and the project's `AGENTS.md`/`CLAUDE.md` or the java-code-style skill (when opted in) disagree, follow those (see SKILL.md `<style_sources>`).
+
 ## Naming
 
 ### Casing (Google §5.2)
@@ -31,22 +33,21 @@ class HTTPClient {}             class HttpClient {}
 
 ## `final`
 
-- **Local variables and parameters that are never reassigned should be `final`** when the codebase uses that convention — it documents intent and prevents accidental reassignment. Apply consistently with the surrounding file; don't sprinkle `final` into a file that doesn't use it.
-- **Fields that are set once should be `final`.** A non-final field with no reassignment path is a mutability smell (Effective Java Item 17).
-- **Make classes `final`** unless they're explicitly designed and documented for extension (Effective Java Item 19: "design and document for inheritance or else prohibit it").
+House style (`java-code-style: Effectively final`):
+- **Every local variable that is never reassigned is `final`**, including enhanced-for variables (`for (final Order order : orders)`).
+- **Every field is `final`.** JPA entities are the only exception. A non-final field with no reassignment path is a mutability smell (Effective Java Item 17).
+- **Method, lambda and catch parameters are not `final`.** `final` on a parameter is a nit, not a virtue.
+- **Classes don't need to be `final`.** `final` is about fields and locals; never flag a class for missing it.
 
-## `var` (local-variable type inference, Java 10+)
+## No `var`
 
-Use `var` when the initializer makes the type obvious; avoid it when it hides the type.
+House style (`java-code-style: Effectively final`): don't use `var`; declare the type. Reviews happen in GitHub diffs, where a reader can't hover to see what `var` inferred, so even an "obvious" `var` costs the reviewer. Flag every new `var` (Low), with the explicit `final` declaration as the fix.
 
 ```java
-var orders = new ArrayList<Order>();        // GOOD — type is right there
-var result = service.process(input);        // QUESTIONABLE — what type is result?
-var count = 3;                              // BAD — is this int or long? be explicit for primitives that matter
+var result = service.process(input);              // BAD — what is result?
+final ProcessResult result = service.process(input);  // GOOD
+for (final Map.Entry<String, Order> entry : orders.entrySet()) { ... }
 ```
-
-- Good: `new` expressions, obvious factory calls, `for (var entry : map.entrySet())`.
-- Avoid: when the RHS is a bare method call returning a non-obvious type, for `null`/literals where the inferred type surprises, or where it harms a reader scanning the code.
 
 ## Control flow
 
@@ -94,15 +95,25 @@ return repo.find(id).orElseThrow(() -> new OrderNotFoundException(id));
 
 - **No wildcard imports** (`import java.util.*;`) — Checkstyle flags them.
 - No unused imports.
-- One ordering, applied consistently (Google: single ASCII-sorted block; many projects group `java`/`javax`, third-party, then project — match the file).
-- Static imports sparingly, for genuinely improved readability (`assertThat`, `Math.max`) — not to hide where a symbol comes from.
+- House order: all other imports, a blank line, `java.*`/`javax.*`/`jakarta.*`, then static imports. Usually checkstyle enforces it; don't restate.
+- No static imports outside tests. In tests, static imports for `assertThat`, Mockito and MockMvc matchers are expected.
 
 ## Comments
 
-- Explain **why**, not **what** — the code shows what. A comment restating the line is noise; delete it.
+House style (`java-code-style: Comments`):
+- **No explanatory comments and no Javadoc on application code.** Names carry the meaning. Flag a comment that explains code: the fix is a better name or a smaller method, and the rationale moves to the commit message or the README.
 - No commented-out code blocks — that's what version control is for. Flag them for deletion.
-- `// TODO(owner): description` — assign accountability. Ownerless, undated TODOs rot.
-- Javadoc on **published-library** public API is expected; on internal helpers it's usually noise (per the quality bar — don't demand it).
+- A `TODO` needs a ticket reference, or it goes.
+- Javadoc only on a **published library's** public API.
+
+## Strings
+
+- Build strings with `"...".formatted(...)` and text blocks, not `String.format` or long `+` chains (`java-code-style: Idioms`). Exception messages included.
+
+## Helpers and overloads
+
+- Helpers are small and `private`, and `static` when they touch no instance state.
+- Overloads sit next to each other (checkstyle). A private helper gets its own name instead of overloading a public method.
 
 ## Common findings (quick scan)
 
@@ -114,5 +125,8 @@ return repo.find(id).orElseThrow(() -> new OrderNotFoundException(id));
 - Wildcard import.
 - `else` after `return`/`throw`.
 - Braceless `if` body.
-- Commented-out code; what-not-why comments; ownerless TODOs.
-- `var x = something()` where the type is non-obvious.
+- Commented-out code; any explanatory comment or Javadoc on application code; TODO without a ticket.
+- Non-reassigned local without `final`; `final` on a parameter.
+- Any `var`: declare the type.
+- `String.format` or a `+` chain where `formatted` or a text block reads better.
+- Non-private helper used in one class; instance helper that touches no state.

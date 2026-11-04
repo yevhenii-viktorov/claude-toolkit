@@ -24,7 +24,7 @@ List<String> names = orders.stream()
 
 ## Terminal-op correctness
 
-- `Stream.toList()` (Java 16+) returns an **unmodifiable** list — good default. `collect(Collectors.toList())` returns a mutable list with no guarantee of type; pick deliberately.
+- `Stream.toList()` (Java 16+) returns an **unmodifiable** list and is the house default. Flag `collect(Collectors.toList())` unless the caller really needs to mutate the result.
 - `findFirst`/`findAny`/`reduce` return `Optional` — handle absence; don't `.get()` blindly (see idioms-style.md).
 - `count()` after a `filter` that you then also iterate = two passes; restructure.
 - `Collectors.toMap` throws on duplicate keys unless you supply a merge function — a common runtime surprise on real data.
@@ -39,7 +39,7 @@ List<String> names = orders.stream()
 
 - **Right type for the job**: `ArrayList` for indexed/append, `ArrayDeque` over `Stack`/`LinkedList` for stack/queue, `HashMap` for lookup, `EnumMap`/`EnumSet` for enum keys (Item 37), `LinkedHashMap` when order matters. `Vector`/`Hashtable`/`Stack` are legacy — flag in new code.
 - **Preallocate** when size is known: `new ArrayList<>(expectedSize)`, `new HashMap<>(expectedSize)` — avoids rehash/copy churn (see performance.md).
-- **Immutable factories**: `List.of`, `Set.of`, `Map.of` for fixed contents (Item 15-adjacent) — but remember they're immutable *and* reject nulls; don't `.add` to them (see bugs-correctness.md).
+- **Immutable factories** (house default): `List.of`, `Set.of`, `Map.of`, `EnumSet` for fixed contents (Item 15-adjacent) — but remember they're immutable *and* reject nulls; don't `.add` to them (see bugs-correctness.md).
 
 ## Returning collections (Item 54, 50)
 
@@ -48,7 +48,7 @@ List<String> names = orders.stream()
 
 ## Iteration
 
-- `for (var x : coll)` over manual index loops unless you need the index.
+- `for (final Item item : items)` over manual index loops unless you need the index.
 - Remove during iteration via `Iterator.remove`/`removeIf`, not by mutating the collection in a for-each (ConcurrentModificationException — bugs-correctness.md).
 - `Map` iteration: `entrySet()` when you need both key and value (avoid `keySet()` + `get` — double lookup).
 
