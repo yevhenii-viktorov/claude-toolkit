@@ -1,0 +1,5 @@
+interface:
+  display_name: "Run Plan"
+  short_description: "Execute a PLAN.md file"
+policy:
+  allow_implicit_invocation: false

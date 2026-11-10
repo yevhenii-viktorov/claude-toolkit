@@ -4,7 +4,7 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-> **For humans copying this:** Take sections §1 through §5. Skip the preamble, this note, and the closing "working if" line — they're commentary about the doc, not rules for Claude.
+> **For humans copying this:** Take sections §1 through §6. Skip the preamble, this note, and the closing "working if" line — they're commentary about the doc, not rules for Claude.
 
 ## 1. Think Before Coding
 
@@ -75,7 +75,7 @@ For prose written to the user:
 
 - **No em dashes.** Use commas, colons, parentheses, or separate sentences instead.
 - **Minimal emojis.** Only when clearly appropriate (e.g. the user uses them first); default to none.
-- **Apply humanizer principles** by default: plain, natural phrasing; avoid AI-writing tells (inflated symbolism, rule-of-three, "it's not just X, it's Y" parallelisms, filler). Invoke the full `humanizer` skill only for substantial written deliverables where the polish is worth the tokens, not on every message.
+- **Plain, natural phrasing** by default: avoid AI-writing tells (inflated symbolism, rule-of-three, "it's not just X, it's Y" parallelisms, filler).
 
 ---
 

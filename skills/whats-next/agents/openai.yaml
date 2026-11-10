@@ -1,0 +1,5 @@
+interface:
+  display_name: "What's Next"
+  short_description: "Write a handoff document for a fresh session"
+policy:
+  allow_implicit_invocation: false
