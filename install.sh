@@ -23,9 +23,30 @@ link() {
   echo "linked $dest"
 }
 
-install_into() {
+# Claude Code follows @imports, so each machine keeps its own CLAUDE.md for
+# machine-specific notes and imports the shared rules from this repo.
+import_claude_md() {
+  file=$1/CLAUDE.md
+  line="@$repo/CLAUDE.md"
+  if [ -L "$file" ] && [ "$(readlink "$file")" = "$repo/CLAUDE.md" ]; then
+    rm "$file"
+  fi
+  if [ -f "$file" ] && grep -qxF "$line" "$file"; then
+    return 0
+  fi
+  if [ -e "$file" ] || [ -L "$file" ]; then
+    mkdir -p "$backup"
+    cp -P "$file" "$backup/$(printf '%s' "${file#"$HOME"/}" | tr / _ | sed 's/^\.//')"
+    { printf '%s\n\n' "$line"; cat "$file"; } > "$file.tmp.$$"
+  else
+    printf '%s\n' "$line" > "$file.tmp.$$"
+  fi
+  mv "$file.tmp.$$" "$file"
+  echo "added shared rules import to $file"
+}
+
+install_skills() {
   home=$1
-  instructions=$2
   if [ ! -d "$home" ]; then
     return 0
   fi
@@ -40,8 +61,15 @@ install_into() {
       esac
     fi
   done
-  link "$repo/CLAUDE.md" "$home/$instructions"
 }
 
-install_into "${CLAUDE_CONFIG_DIR:-$HOME/.claude}" CLAUDE.md
-install_into "${CODEX_HOME:-$HOME/.codex}" AGENTS.md
+claude_home=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+codex_home=${CODEX_HOME:-$HOME/.codex}
+install_skills "$claude_home"
+install_skills "$codex_home"
+if [ -d "$claude_home" ]; then
+  import_claude_md "$claude_home"
+fi
+if [ -d "$codex_home" ]; then
+  link "$repo/CLAUDE.md" "$codex_home/AGENTS.md"
+fi

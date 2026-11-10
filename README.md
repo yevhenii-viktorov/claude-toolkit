@@ -52,10 +52,11 @@ cd claude-toolkit
 ./install.sh
 ```
 
-`install.sh` links every skill into `~/.claude/skills/` (Claude Code) and `~/.codex/skills/` (Codex),
-and `CLAUDE.md` into `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`. It only touches agents that are
-installed. Anything already at one of those paths is moved to a backup folder first (`~/.Trash` on macOS,
-`~/.local/share/claude-toolkit-backups` elsewhere).
+`install.sh` links every skill into `~/.claude/skills/` (Claude Code) and `~/.codex/skills/` (Codex).
+It adds an `@<clone>/CLAUDE.md` import to the top of `~/.claude/CLAUDE.md`, so anything else in that file
+stays as machine-specific notes, and links `~/.codex/AGENTS.md` to `CLAUDE.md` (Codex does not follow
+imports). It only touches agents that are installed. Anything it replaces or rewrites is backed up first
+(`~/.Trash` on macOS, `~/.local/share/claude-toolkit-backups` elsewhere).
 
 The skills are links into the clone, so pulling updates them. Re-run the script after pulling to pick up
 new skills:
